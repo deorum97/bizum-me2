@@ -1,0 +1,7 @@
+{
+  "name": "BizumMe",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
