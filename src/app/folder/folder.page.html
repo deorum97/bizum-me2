@@ -1,21 +1,89 @@
-<ion-header [translucent]="true">
+<ion-header class="bizumme-header">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>{{ folder }}</ion-title>
+    <ion-title>BizumMe</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">{{ folder }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="page-wrapper">
+    <ion-button class="add-expense-btn" expand="block" (click)="addExpense()">
+      <ion-icon slot="start" name="add-outline"></ion-icon>
+      Agregar Gasto
+    </ion-button>
 
-  <div id="container">
-    <strong class="capitalize">{{ folder }}</strong>
-    <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <section class="expense-list">
+      @for (expense of expenses; track expense.id) {
+
+      <ion-card class="expense-card">
+        <ion-card-header>
+          <ion-card-title>{{ expense.title }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="expense-main">
+          <div>
+            <p>Total: <span>{{ money(expense.total) }}</span></p>
+            @if (expense.debtors.length > 0) {
+            <p>Por cobrar: <span>{{ money(totalDebtors(expense)) }}</span></p>
+            <p class="people-row">
+              <ion-icon name="person-outline"></ion-icon>
+              {{ debtorLabel(expense.debtors.length) }}
+            </p>
+            }
+          </div>
+          <button
+            class="icon-btn"
+            type="button"
+            (click)="deleteExpense(expense.id)"
+            aria-label="Eliminar gasto"
+          >
+            <ion-icon name="trash-outline"></ion-icon>
+          </button>
+        </ion-card-content>
+        <button
+          class="details-toggle"
+          type="button"
+          (click)="toggleDetails(expense)"
+        >
+          {{ expense.expanded ? 'Ocultar detalles' : 'Ver detalles' }}
+          <ion-icon
+            [name]="expense.expanded ? 'chevron-up-outline' : 'chevron-down-outline'"
+          ></ion-icon>
+        </button>
+
+        @if (expense.expanded) {
+        <div class="details">
+          <h3>Personas que deben:</h3>
+
+          @if (expense.debtors.length === 0) {
+          <p class="empty">Todavia no hay personas en este gasto.</p>
+          } @for (debtor of expense.debtors; track debtor.id) {
+          <div class="debtor-item">
+            <div>
+              <p class="debtor-name">{{ debtor.name }}</p>
+              <p>{{ money(debtor.amount) }}</p>
+            </div>
+            <button
+              class="icon-btn"
+              type="button"
+              (click)="removeDebtor(expense, debtor.id)"
+              aria-label="Eliminar persona"
+            >
+              <ion-icon name="trash-outline"></ion-icon>
+            </button>
+          </div>
+          }
+
+          <ion-button
+            class="add-person-btn"
+            expand="block"
+            (click)="addDebtor(expense)"
+          >
+            <ion-icon slot="start" name="add-outline"></ion-icon>
+            Agregar Persona
+          </ion-button>
+        </div>
+        }
+      </ion-card>
+      }
+    </section>
   </div>
 </ion-content>
