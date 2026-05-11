@@ -1,0 +1,87 @@
+<ion-content fullscreen class="login-page">
+  <div class="login-shell">
+    <header class="login-header">
+      <h1>BizumMe</h1>
+    </header>
+
+    <main class="login-body">
+      <section class="login-card">
+        <header class="card-header">
+          <h2>
+            {{ isRegisterMode ? textos.tituloRegistro : textos.tituloLogin }}
+          </h2>
+          <p>{{ isRegisterMode ? textos.textoRegistro : textos.textoLogin }}</p>
+        </header>
+
+        <form (ngSubmit)="submitEmailForm()" class="auth-form">
+          <ion-input
+            class="auth-input"
+            [label]="textos.textoLabelEmail"
+            labelPlacement="stacked"
+            fill="outline"
+            type="email"
+            autocomplete="email"
+            placeholder="email@domain.com"
+            [(ngModel)]="email"
+            name="email"
+            required
+          ></ion-input>
+
+          <ion-input
+            class="auth-input"
+            [label]="textos.textoLabelPassword"
+            labelPlacement="stacked"
+            fill="outline"
+            type="password"
+            autocomplete="current-password"
+            placeholder="••••••••"
+            [(ngModel)]="password"
+            name="password"
+            required
+          ></ion-input>
+
+          @if (errorMessage) {
+          <p class="error-message">{{ errorMessage }}</p>
+          }
+
+          <ion-button
+            expand="block"
+            type="submit"
+            class="submit-button"
+            [disabled]="loading"
+          >
+            @if (loading) {
+            <ion-spinner slot="start" name="crescent"></ion-spinner>
+            } {{ loading ? textos.botonProcesando : textos.botonContinuar }}
+          </ion-button>
+        </form>
+
+        @if(!isRegisterMode){
+        <div class="divider">
+          <span>o</span>
+        </div>
+
+        <ion-button
+          expand="block"
+          fill="solid"
+          class="google-button"
+          (click)="signInWithGoogle()"
+          [disabled]="loading"
+        >
+          <ion-icon slot="start" name="logo-google"></ion-icon>
+          Continuar con Google
+        </ion-button>
+        }
+
+        <p class="legal-text">
+          Al hacer clic en continuar, aceptas nuestros Términos de Servicio y
+          nuestra Política de Privacidad
+        </p>
+
+        <button type="button" class="mode-switch" (click)="toggleMode()">
+          {{ isRegisterMode ? textos.cambiaLogin : textos.cambiaRegistro }}
+        </button>
+      </section>
+    </main>
+  </div>
+</ion-content>
