@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Cuenta</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input [value]="email" readonly></ion-input>
+      </ion-item>
+
+      <form (ngSubmit)="saveName()">
+        <ion-item>
+          <ion-label position="stacked">Nombre</ion-label>
+          <ion-input [(ngModel)]="displayName" name="displayName"></ion-input>
+        </ion-item>
+        <ion-button expand="block" type="submit" class="ion-margin-top"
+          >Guardar nombre</ion-button
+        >
+      </form>
+
+      <div *ngIf="canChangePassword">
+        <form (ngSubmit)="changePassword()">
+          <ion-item>
+            <ion-label position="stacked">Nueva contraseña</ion-label>
+            <ion-input
+              [(ngModel)]="newPassword"
+              name="newPassword"
+              type="password"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Confirmar contraseña</ion-label>
+            <ion-input
+              [(ngModel)]="confirmPassword"
+              name="confirmPassword"
+              type="password"
+            ></ion-input>
+          </ion-item>
+          <ion-button expand="block" type="submit" class="ion-margin-top"
+            >Cambiar contraseña</ion-button
+          >
+        </form>
+      </div>
+
+      <div *ngIf="!canChangePassword" class="ion-text-center ion-margin-top">
+        <small
+          >No puedes cambiar la contraseña porque iniciaste sesión con
+          Google.</small
+        >
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

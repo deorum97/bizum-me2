@@ -6,8 +6,15 @@ import { FolderPage } from './folder.page';
 const routes: Routes = [
   {
     path: '',
-    component: FolderPage
-  }
+    component: FolderPage,
+  },
+  {
+    path: 'edit/:expenseId',
+    loadChildren: () =>
+      import('./edit-expense/edit-expense.module').then(
+        (m) => m.EditExpensePageModule,
+      ),
+  },
 ];
 
 @NgModule({

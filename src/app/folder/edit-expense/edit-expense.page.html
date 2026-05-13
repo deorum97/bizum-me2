@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/folder/expenses"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Editar Gasto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="page-wrapper">
+    <div class="form-group">
+      <label>Nombre del gasto</label>
+      <ion-input
+        [(ngModel)]="title"
+        placeholder="Nombre del gasto"
+        type="text"
+      ></ion-input>
+    </div>
+
+    <div class="form-group">
+      <label>Total</label>
+      <ion-input
+        [(ngModel)]="total"
+        placeholder="Total"
+        type="number"
+      ></ion-input>
+    </div>
+
+    <div class="section">
+      <h2>Personas que deben</h2>
+
+      @if (debtors.length === 0) {
+      <p class="empty">Todavía no hay personas en este gasto.</p>
+      } @for (debtor of debtors; track debtor.id; let i = $index) {
+      <div class="debtor-item">
+        <div class="debtor-info">
+          <p class="debtor-name">{{ debtor.name }}</p>
+          <p class="debtor-amount">{{ money(debtor.amount) }}</p>
+        </div>
+        <div class="debtor-actions">
+          <button
+            class="icon-btn"
+            type="button"
+            (click)="editDebtor(debtor, i)"
+            aria-label="Editar persona"
+          >
+            <ion-icon name="pencil-outline"></ion-icon>
+          </button>
+          <button
+            class="icon-btn danger"
+            type="button"
+            (click)="removeDebtor(i)"
+            aria-label="Eliminar persona"
+          >
+            <ion-icon name="trash-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
+      }
+
+      <ion-button class="add-person-btn" expand="block" (click)="addDebtor()">
+        <ion-icon slot="start" name="add-outline"></ion-icon>
+        Agregar Persona
+      </ion-button>
+    </div>
+
+    <div class="actions">
+      <ion-button class="cancel-btn" expand="block" (click)="cancelEdit()">
+        Cancelar
+      </ion-button>
+      <ion-button class="save-btn" expand="block" (click)="saveExpense()">
+        Guardar Cambios
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

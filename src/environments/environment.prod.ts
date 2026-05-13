@@ -7,5 +7,7 @@ export const environment = {
     storageBucket: 'bizumme-53a17.firebasestorage.app',
     messagingSenderId: '851726463310',
     appId: '1:851726463310:web:b38e5e8588e4b51e1f2e1f',
+    googleWebClientId:
+      '851726463310-evepenfl6ve3f8tntm3v5e361j24vb9h.apps.googleusercontent.com',
   },
 };

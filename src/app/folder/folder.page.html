@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true">
+<ion-content fullscreen class="main-page">
   <div class="page-wrapper">
     <ion-button class="add-expense-btn" expand="block" (click)="addExpense()">
       <ion-icon slot="start" name="add-outline"></ion-icon>
@@ -23,14 +23,24 @@
             </p>
             }
           </div>
-          <button
-            class="icon-btn"
-            type="button"
-            (click)="deleteExpense(expense.id)"
-            aria-label="Eliminar gasto"
-          >
-            <ion-icon name="trash-outline"></ion-icon>
-          </button>
+          <div class="action-buttons">
+            <button
+              class="icon-btn"
+              type="button"
+              (click)="editExpense(expense.id)"
+              aria-label="Editar gasto"
+            >
+              <ion-icon class="black" name="create-outline"></ion-icon>
+            </button>
+            <button
+              class="icon-btn"
+              type="button"
+              (click)="deleteExpense(expense.id)"
+              aria-label="Eliminar gasto"
+            >
+              <ion-icon name="trash-outline"></ion-icon>
+            </button>
+          </div>
         </ion-card-content>
         <button
           class="details-toggle"

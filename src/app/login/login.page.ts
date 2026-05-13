@@ -106,10 +106,27 @@ export class LoginPage implements OnInit {
       return 'Completa el correo y la contraseña.';
     }
 
+    if (error instanceof Error) {
+      switch (error.message) {
+        case 'google-login-offline-not-supported':
+          return 'El login de Google devolvió un modo no compatible en Android.';
+        case 'google-login-missing-id-token':
+          return 'Google no devolvió un token válido. Revisa la configuración de Firebase y SHA-1.';
+      }
+    }
+
     const code =
       typeof error === 'object' && error !== null && 'code' in error
         ? String((error as { code?: string }).code ?? '')
         : '';
+
+    if (code === 'USER_CANCELLED') {
+      return 'Has cancelado el inicio de sesión con Google.';
+    }
+
+    if (error instanceof Error && error.message) {
+      return error.message;
+    }
 
     switch (code) {
       case 'auth/invalid-email':

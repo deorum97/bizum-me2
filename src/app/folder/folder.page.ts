@@ -1,51 +1,47 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { AlertController, ModalController } from '@ionic/angular';
+import {
+  ExpensesService,
+  Expense,
+  Debtor,
+} from '../core/expenses/expenses.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AddEditExpenseModalComponent } from './modals/add-edit-expense-modal.component';
+import { AddEditDebtorModalComponent } from './modals/add-edit-debtor-modal.component';
 
-interface Debtor {
-  id: number;
-  name: string;
-  amount: number;
-}
-
-interface Expense {
-  id: number;
-  title: string;
-  total: number;
-  debtors: Debtor[];
-  expanded: boolean;
-}
 @Component({
   selector: 'app-folder',
   templateUrl: './folder.page.html',
   styleUrls: ['./folder.page.scss'],
   standalone: false,
 })
-export class FolderPage implements OnInit {
+export class FolderPage implements OnInit, OnDestroy {
   public folder!: string;
-  private nextExpenseId = 3;
-  private nextDebtorId = 3;
+  public expenses: Expense[] = [];
+  private destroy$ = new Subject<void>();
   private activatedRoute = inject(ActivatedRoute);
-  public expenses: Expense[] = [
-    {
-      id: 1,
-      title: 'as',
-      total: 12,
-      debtors: [],
-      expanded: false,
-    },
-    {
-      id: 2,
-      title: 'asd',
-      total: 12,
-      debtors: [{ id: 1, name: 'asd', amount: 2 }],
-      expanded: false,
-    },
-  ];
-  constructor(private alertController: AlertController) {}
+  private alertController = inject(AlertController);
+  private modalController = inject(ModalController);
+  private expensesService = inject(ExpensesService);
+  private router = inject(Router);
 
   ngOnInit() {
     this.folder = this.activatedRoute.snapshot.paramMap.get('id') as string;
+
+    // Cargar gastos del usuario actual
+    this.expensesService.loadExpenses();
+    this.expensesService.expenses$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((expenses) => {
+        this.expenses = expenses;
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   public totalDebtors(expense: Expense): number {
@@ -53,65 +49,30 @@ export class FolderPage implements OnInit {
   }
 
   public async addExpense(): Promise<void> {
-    const alert = await this.alertController.create({
-      header: 'Agregar gasto',
-      inputs: [
-        {
-          name: 'title',
-          type: 'text',
-          placeholder: 'Nombre del gasto',
-        },
-        {
-          name: 'total',
-          type: 'number',
-          placeholder: 'Total',
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
-        {
-          text: 'Guardar',
-          handler: (value) => {
-            const title = String(value.title ?? '').trim();
-            const total = Number(value.total);
-
-            if (!title || !Number.isFinite(total) || total <= 0) {
-              return false;
-            }
-
-            this.expenses.unshift({
-              id: this.nextExpenseId,
-              title,
-              total,
-              debtors: [],
-              expanded: false,
-            });
-            this.nextExpenseId += 1;
-            return true;
-          },
-        },
-      ],
+    const modal = await this.modalController.create({
+      component: AddEditExpenseModalComponent,
+      componentProps: {},
     });
 
-    await alert.present();
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data) {
+      await this.expensesService.addExpense(data.title, data.total);
+    }
   }
 
-  public async deleteExpense(expenseId: number): Promise<void> {
+  public async deleteExpense(expenseId: string): Promise<void> {
     const confirm = await this.alertController.create({
       header: 'Eliminar gasto',
-      message: 'Esta accion no se puede deshacer.',
+      message: 'Esta acción no se puede deshacer.',
       buttons: [
         { text: 'Cancelar', role: 'cancel' },
         {
           text: 'Eliminar',
           role: 'destructive',
-          handler: () => {
-            this.expenses = this.expenses.filter(
-              (expense) => expense.id !== expenseId,
-            );
+          handler: async () => {
+            await this.expensesService.deleteExpense(expenseId);
           },
         },
       ],
@@ -125,55 +86,22 @@ export class FolderPage implements OnInit {
   }
 
   public async addDebtor(expense: Expense): Promise<void> {
-    const alert = await this.alertController.create({
-      header: 'Agregar persona',
-      inputs: [
-        {
-          name: 'name',
-          type: 'text',
-          placeholder: 'Nombre',
-        },
-        {
-          name: 'amount',
-          type: 'number',
-          placeholder: 'Cantidad',
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
-        {
-          text: 'Guardar',
-          handler: (value) => {
-            const name = String(value.name ?? '').trim();
-            const amount = Number(value.amount);
-
-            if (!name || !Number.isFinite(amount) || amount <= 0) {
-              return false;
-            }
-
-            expense.debtors.push({
-              id: this.nextDebtorId,
-              name,
-              amount,
-            });
-            this.nextDebtorId += 1;
-            expense.expanded = true;
-            return true;
-          },
-        },
-      ],
+    const modal = await this.modalController.create({
+      component: AddEditDebtorModalComponent,
+      componentProps: {},
     });
 
-    await alert.present();
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data) {
+      await this.expensesService.addDebtor(expense.id, data.name, data.amount);
+      expense.expanded = true;
+    }
   }
 
-  public removeDebtor(expense: Expense, debtorId: number): void {
-    expense.debtors = expense.debtors.filter(
-      (debtor) => debtor.id !== debtorId,
-    );
+  public async removeDebtor(expense: Expense, debtorId: string): Promise<void> {
+    await this.expensesService.removeDebtor(expense.id, debtorId);
   }
 
   public money(value: number): string {
@@ -182,5 +110,9 @@ export class FolderPage implements OnInit {
 
   public debtorLabel(count: number): string {
     return count === 1 ? '1 persona' : `${count} personas`;
+  }
+
+  public editExpense(expenseId: string): void {
+    this.router.navigate(['/folder', this.folder, 'edit', expenseId]);
   }
 }

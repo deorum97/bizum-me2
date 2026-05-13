@@ -77,6 +77,16 @@
   word-break: break-word;
 }
 
+@media (max-width: 767px) {
+  .app-menu {
+    --width: min(86vw, 340px);
+  }
+
+  .app-menu ion-content {
+    --padding-top: calc(88px + env(safe-area-inset-top));
+  }
+}
+
 @media (min-width: 768px) {
   .app-header {
     display: none;

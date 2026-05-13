@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'bizumme.app',
+  appId: 'com.deorum.bizumme',
   appName: 'BizumMe',
   webDir: 'www',
 };

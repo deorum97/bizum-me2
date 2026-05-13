@@ -1,0 +1,189 @@
+:host {
+  --panel: #ececed;
+  --surface: #f6f6f7;
+  --navy: #020631;
+  --muted: #4d5469;
+  --line: #d6d9df;
+  --danger: #f14362;
+}
+
+ion-header ion-toolbar {
+  --background: var(--navy);
+  --color: #fff;
+
+  ion-title {
+    font-weight: 700;
+  }
+}
+
+.page-wrapper {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px 14px;
+}
+
+@media (max-width: 767px) {
+  .page-wrapper {
+    padding-top: calc(76px + env(safe-area-inset-top) + 20px);
+  }
+}
+
+.form-group {
+  margin-bottom: 24px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    color: #06071d;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  ion-input {
+    --background: #f6f6f7;
+    --border-radius: 10px;
+    --padding-start: 14px;
+    --padding-end: 14px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    border: 1px solid #cfd3da;
+    border-radius: var(--border-radius);
+
+    font-size: 1rem;
+    color: black;
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+}
+
+.section {
+  margin-bottom: 28px;
+
+  h2 {
+    margin: 0 0 16px;
+    color: #040619;
+    font-size: 1.06rem;
+    font-weight: 800;
+  }
+
+  .empty {
+    color: #6a7184;
+    font-size: 0.95rem;
+    padding: 12px;
+    background: var(--surface);
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+}
+
+.debtor-item {
+  background: var(--panel);
+  border: 1px solid #cfd3da;
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 12px;
+
+  .debtor-info {
+    flex: 1;
+
+    .debtor-name {
+      margin: 0;
+      color: #06071d;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .debtor-amount {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+  }
+
+  .debtor-actions {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  background: transparent;
+  color: #55607b;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  &.danger {
+    color: var(--danger);
+
+    &:hover {
+      background: rgba(241, 67, 98, 0.1);
+    }
+  }
+
+  ion-icon {
+    font-size: 1.2rem;
+  }
+}
+
+.add-person-btn {
+  --background: var(--navy);
+  --color: #fff;
+  --border-radius: 10px;
+  border-radius: var(--border-radius);
+  font-weight: 700;
+  min-height: 46px;
+  margin-bottom: 12px;
+  box-shadow: 3px 3px 5px #0000004f;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+
+  .cancel-btn,
+  .save-btn {
+    flex: 1;
+    --border-radius: 10px;
+    border-radius: var(--border-radius);
+    font-weight: 700;
+    min-height: 46px;
+    box-shadow: 3px 3px 5px #0000004f;
+  }
+
+  .cancel-btn {
+    --background: var(--panel);
+    --color: #06071d;
+    border: 1px solid #cfd3da;
+    border-radius: var(--border-radius);
+  }
+
+  .save-btn {
+    --background: var(--navy);
+    --color: #fff;
+  }
+}
+
+@media (min-width: 768px) {
+  .page-wrapper {
+    padding: 24px 18px;
+  }
+}
