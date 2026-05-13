@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "851726463310",
+    "project_id": "bizumme-53a17",
+    "storage_bucket": "bizumme-53a17.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851726463310:android:40a193ed46b07e661f2e1f",
+        "android_client_info": {
+          "package_name": "com.deorum.bizumme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "851726463310-evepenfl6ve3f8tntm3v5e361j24vb9h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzYVGrGT-daWDZDmA0U3vAJtlRQtKfmQs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "851726463310-evepenfl6ve3f8tntm3v5e361j24vb9h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
